@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blog</title>
+</head>
+<body>
+    <h1>Blog</h1>
+<!--파이썬 코드를 html에서 사용할려면 {}사용 posts는 views에서 넘겨준 posts를 사용한것
+    {}중괄호 하나는 파이썬코드
+    중괄호 두개는 파이썬 변수
+    p.title과 p.created_at p.content는 model안에있는 변수들-->
+{% for p in posts %}
+    <hr/>
+    <h2>{{ p.title }}</h2>
+    <h4>{{ p.created_at }}</h4>
+    <p>{{ p.contents }}</p>
+{% endfor %} <!--for문이 끝나면 써줘야 하는 문법-->
+
+</body>
+</html>
