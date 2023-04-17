@@ -17,10 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),#어드민 사이트 연결해주기 admin을 붙였을때 링크되는 위치
     path('', include('single_pages.urls')), #아무것도 붙이지 않으면 single_pages로(single_pages에 urls파일이 없으므로 생성하기)
     path('blog/', include('blog.urls')),#blog를 붙였을때 연결위치(마찬가지로 blog에도 urls파일 생성해주기)
+
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

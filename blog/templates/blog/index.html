@@ -13,9 +13,9 @@
     {}중괄호 하나는 파이썬코드
     중괄호 두개는 파이썬 변수
     p.title과 p.created_at p.content는 model안에있는 변수들-->
-{% for p in posts %}
+{% for p in post_list %}
     <hr/>
-    <h2>{{ p.title }}</h2>
+    <h2><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h2>
     <h4>{{ p.created_at }}</h4>
     <p>{{ p.contents }}</p>
 {% endfor %} <!--for문이 끝나면 써줘야 하는 문법-->
