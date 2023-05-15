@@ -1,0 +1,24 @@
+{% extends 'exam/base.html' %}
+            {% block menu %}
+            {% endblock %}
+
+            {% block main_area %} <!--모듈화-->
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">St_ID</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">DETAIL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for s in student_list %}
+                  <tr>
+                    <th scope="row">{{ s.num }}</th>
+                    <td>{{ s.name }}</td>
+                    <td><a class="btn btn-outline-success" href="{{ s.get_absolute_url }}" role="button">학생증 보기</a></td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endblock %}

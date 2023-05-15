@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'single_pages',
+    'exam',
 ]
 
 MIDDLEWARE = [
@@ -116,9 +117,10 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
 import os #미디어를 넣기 위한 os
 
-STATIC_URL = 'static/'
+STATIC_URL = 'static/' #개별 폴더일때 /를 앞쪽에 안붙임
 
 MEDIA_URL = '/media/' #url 설정
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media') #server local이 됨
