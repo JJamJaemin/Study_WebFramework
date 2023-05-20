@@ -40,7 +40,7 @@ class Post(models.Model): #일종의 db구조 , field설정
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)#카테고리 지정하기
 
     # 다대 다 관계 ManyToManyField
-    tag = models.ManyToManyField(Tag, blank=True)  # 카테고리 지정하기
+    tags = models.ManyToManyField(Tag, blank=True)  # 카테고리 지정하기
 
     #{self.pk} : 타이틀의 앞에다가 번호를 붙여줌 프라이머리 키 의미.
     #{self.title} : 내가 설정한 타이틀로 제목을 설정해줌ㅂ

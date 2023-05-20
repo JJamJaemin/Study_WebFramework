@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from .models import Post,Category #모델을 가져오고 그 안에 있는 Post클래스 가져오기
-from django.views.generic import ListView, DetailView # 장고가 가지고 있는 클래스들 리스트를 볼수 있고 하나하나 볼수있는 페이지
+from django.shortcuts import render, redirect
+from .models import Post,Category,Tag #모델을 가져오고 그 안에 있는 Post클래스 가져오기
+from django.views.generic import ListView, DetailView,CreateView # 장고가 가지고 있는 클래스들 리스트를 볼수 있고 하나하나 볼수있는 페이지
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
 
@@ -70,3 +71,20 @@ def category_page(request, slug): #프로그래밍, 문화-예술, 웹개발, no
             'category' : category,
         },
     )
+
+class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView): #createview는 폼을 만드는 놈
+    model = Post
+    fields = ['title', 'hook_text', 'contents', 'head_image', 'file_upload', 'category', 'tags']
+    #template_name = post_form.html
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
+
+    def form_valid(self, form):
+        current_user = self.request.user
+        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
+            form.instance.author = current_user
+            #not tag
+            return super(PostCreate, self).form_valid(form)
+        else:
+            return redirect('/blog/')

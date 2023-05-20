@@ -1,62 +1,70 @@
 {% extends 'blog/base.html' %}
 
-
     {% block main_area %}
-                <!-- Blog post-->
+                            <!-- Blog post-->
         <h1>Blog
-            {% if category %}<span class ="badge badge-secondary">{{ category }}</span>
+            {% if category %}<span class = "badge badge-secondary">{{ category }}</span>
             {% endif %}
         </h1>
         {% if post_list.exists %}
-            {% for p in post_list %} <!--반복문-->
-                <div class="card mb-4" id="post-{{ p.pk }}">
-                    {% if p.head_image %}<!--이미지가 없는 블로그도 있으므로 있을때만 출력하는 if문-->
-                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head_image" height="300" />
-                    {% else %}
-                    <img class="card-img-top" src="https://picsum.photos/seed/{{ p.pk }}/800/200" alt="random image" />
-                    {% endif %}
-                    <div class="card-body">
-                        {% if p.category %} <!--카테고리 띄워주는 기능-->
-                        <span class="badge badge-secondary float-right">{{ p.category }}</span>
-                        {% else %}
-                        <span class="badge badge-secondary float-right">미분류</span>
-                        {% endif %}
-                        <!--
-                        <div class="small text-muted">{{ p.created_at }} by {{ p.author | upper}}</div>날짜가져오기-->
-                        <h2 class="card-title h4">{{ p.title }}</h2><!--제목가져오기-->
-                        {% if p.hook_text %} <!--hook_text가 있을때만 출력해주는 if문-->
-                        <h5 class="text-muted">{{ p.hook_text }}</h5>
-                        {% endif %}
-                        <!--리스트에 내용 자르기-->
-                        <p class="card-text">{{ p.contents | truncatewords:5 }}</p><!--내용가져오기 words=띄어쓰기 chars=글자-->
-                        <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a><!--원본가져오기-->
-                    </div>
-                    <div class="card-footer text-muted">
-                        posted on {{ p.created_at }} by
-                        <a href="#">{{ p.author | upper }}</a>
+                            {% for p in post_list %}
+                            <div class="card mb-4" id="post-{{ p.pk }}">
+                                {% if p.head_image %}<!--이미지가 있을때만 출력하는 반복문-->
+                                <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head_image" height="300"/>
+                                {% else %}
+                                <img class="card-img-top" src="https://picsum.photos/seed/{{ p.pk }}/800/300" alt="random image"/>
+                                {% endif %}
+                                <div class="card-body">
+                                    {% if p.category %}
+                                        <span class="badge badge-secondary float-right">{{ p.category}}</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary float-right">미분류</span>
+                                    {% endif %}
+                                    <!--
+                                    <div class="small text-muted">
+                                        {{ p.updated_at }} by {{ p.author | upper }}
+                                    </div>
+                                    -->
+                                    <h2 class="card-title h4">{{ p.title }}</h2>
 
-                    </div>
-                </div>
-            {% endfor %} <!--반복문끝-->
-        {% else %}
-            <h3>아직 게시물이 없습니다.</h3>
-        {% endif %}
-                <!-- Pagination-->
-                <nav aria-label="Pagination">
-                    <hr class="my-0" />
-                    <ul class="pagination justify-content-center my-4">
-                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-                        <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">15</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">Older</a></li>
-                    </ul>
-                </nav>
+                                    {% if p.hook_test %}
+                                    <h5 class="text-muted">{{ p.hook_text }}</h5>
+                                    {% endif %}
+
+                                    <p class="card-text">{{ p.contents | truncatechars:5}}</p><!--내용가져오기 words=띄어쓰기 chars=글자-->
+
+                                    <!-- tag area -->
+                                    {% if p.tags.exists %}
+                                        <i class="fas fa-tags"></i>
+                                        {% for tag in p.tags.all %}
+                                            <span class = "badge badge-pill badge-light">{{ tag }}</span>
+                                        {% endfor %}
+                                        <br /><br />
+                                    {% endif %}
+
+
+                                    <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Posted on {{ p.created_at }} by
+                                    <a href="#">{{ p.author | upper }}</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+            {% else %}
+                <h3>아직 게시물이 없습니다.</h3>
+            {% endif %}
+                    <!-- Pagination 밑에 번호 1,2,3,..-->
+                                <nav aria-label="Pagination">
+                                    <hr class="my-0" />
+                                    <ul class="pagination justify-content-center my-4">
+                                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
+                                        <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                                        <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
+                                        <li class="page-item"><a class="page-link" href="#!">15</a></li>
+                                        <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                                    </ul>
+                                </nav>
     {% endblock %}
-
-
-
-
-
