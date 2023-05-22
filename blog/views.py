@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Post,Category,Tag #모델을 가져오고 그 안에 있는 Post클래스 가져오기
-from django.views.generic import ListView, DetailView,CreateView # 장고가 가지고 있는 클래스들 리스트를 볼수 있고 하나하나 볼수있는 페이지
+from django.views.generic import ListView, DetailView,CreateView, UpdateView # 장고가 가지고 있는 클래스들 리스트를 볼수 있고 하나하나 볼수있는 페이지
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
+from django.core.exceptions import PermissionDenied
 # Create your views here.
 
 #CBV 방식
@@ -72,19 +72,33 @@ def category_page(request, slug): #프로그래밍, 문화-예술, 웹개발, no
         },
     )
 
+#/blog/create_post/
 class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView): #createview는 폼을 만드는 놈
     model = Post
-    fields = ['title', 'hook_text', 'contents', 'head_image', 'file_upload', 'category', 'tags']
-    #template_name = post_form.html
+    fields = ['title', 'hook_text', 'contents', 'head_image', 'file_upload', 'category', 'tags'] #이미 로그인이 되어있어 user가 빠짐
+    #template_name = post_form.html 자동으로 열림
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return self.request.user.is_superuser or self.request.user.is_staff #관리자 계정이거나 staff계정이거나 확인
 
     def form_valid(self, form):
         current_user = self.request.user
-        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
+        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):#로그인만 되면 되겠금 할려면 뒷부분날리기
             form.instance.author = current_user
             #not tag
             return super(PostCreate, self).form_valid(form)
         else:
             return redirect('/blog/')
+
+#/blog/update_post/pk
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    model = Post
+    fields = ['title', 'hook_text', 'contents', 'head_image', 'file_upload', 'category', 'tags'] #이미 로그인이 되어있어 user가 빠짐
+    #기본 템플릿 post_form.html 따라서 생성할때랑 공유하게 됨 따라서 다른 템플릿 사용
+    template_name = "blog/post_update_form.html"
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(PostUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
