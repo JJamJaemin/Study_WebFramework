@@ -26,6 +26,7 @@ urlpatterns = [
     path('blog/', include('blog.urls')),#blog를 붙였을때 연결위치(마찬가지로 blog에도 urls파일 생성해주기)
     path('exam/', include('exam.urls')),
     path('accounts/', include('allauth.urls')),
+    path('final4/', include('final4.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

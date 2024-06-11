@@ -1,3 +1,24 @@
+{#1.앱 만들기: 가상환경 실행 후 python manage.py startapp blog#}
+{##blog = 앱 이름#}
+{##}
+{#2.모델 만들기: blog/models.py - Post모델 만들기, Django_prj/settings.py - App 추가하기#}
+{##모델 변경,추가하면 cmd에 migrate 해주기#}
+{##}
+{#3.Post 모델 admin에 등록하기: blog/admin.py - from .models import Post, admin.site.register(Post)#}
+{##}
+{#4. index 페이지 만들기:#}
+{#Django_prj/urls.py -> blog/urls.py -> blog/views.py -> blog/templates/blog/index.html#}
+{##}
+{#5. Post 목록 가져오기: blog/views.py -> blog/templates/blog/index.py#}
+{##}
+{#6. post_detail 만들기: blog/urls.py -> blog/views.py -> blog/templates/blog/single_post_page.html#}
+{##}
+{#7. get_absolute_url()으로 고유 url 부여하기: blog/models.py -> blog/templates/blog/post_list.html#}
+{##}
+{#8. ListView로 포스트목록페이지 만들기: blog/urls.py -> blog/views.py -> post_list.html#}
+{#   DetailView로 포스트상세페이지 만들기: blog/views.py -> blog/urls.py#}
+{##}
+{#9.#}
 <!DOCTYPE html>
 {% load static %}  <!-- static 폴더를 사용하겠다 -->
 <html lang="en">
@@ -33,8 +54,8 @@
                         <div class="card-header">Search</div>
                         <div class="card-body">
                             <div class="input-group">
-                                <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                                <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                                <input id="search-input" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                                <button class="btn btn-primary" onclick="searchPost();" id="button-search" type="button">Go!</button>
                             </div>
                         </div>
                     </div>
@@ -61,13 +82,30 @@
                                     </ul>
                             </div>
                         </div>
-                        </div>
                     </div>
             </div>
+            </div>
         </div>
-    </div>
 
     {% include 'blog/footer.html' %}
+
+    <script>
+        function searchPost(){
+            let searchValue = document.getElementById("search-input").value.trim();
+            if(searchValue.length>1){
+                location.href = "/blog/search/" + searchValue + "/";
+            }
+            else{
+                alert("검색어(" + searchValue + ")가 너무 짧습니다");
+            }
+        };
+        {#엔터키를 눌러도 검색되게 하기#}
+        document.getElementById("search-input").addEventListener("keyup", function(event){
+            if(event.key === 'Enter'){
+                searchPost();
+            }
+        });
+    </script>
 
 </body>
 </html>

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'blog',
     'single_pages',
     'exam',
+    'final4',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +151,4 @@ SITE_ID = 1
 
 ACCOUNT_EMAIL_REQUIRED =True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+LOGIN_REDIRECT_URL = "/blog/" #로그인을 하면 나오는 페이지
